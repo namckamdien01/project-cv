@@ -14,6 +14,29 @@ document.getElementById('storage-sv-link').addEventListener('click', () => {
     location.replace('cvs-user.html');
 })
 
+const logOutBtn = document.getElementById('log-out-btn');
+logOutBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    localStorage.removeItem('idUser');
+    location.reload();
+})
+
+const showModalChangePwBtn = document.getElementById('show-modal-change-pw');
+showModalChangePwBtn.addEventListener('click', () => {
+    console.log('ok')
+    document.getElementById('over-flay-change-pw').style.display = 'block';
+})
+
+document.getElementById('exit-modal-change-pw').addEventListener('click', () => {
+    document.getElementById('over-flay-change-pw').style.display = 'none';
+})
+
+let oldPwInput = document.getElementById('old-pw');
+let newPwInput1 = document.getElementById('new-pw-1');
+let newPwInput2 = document.getElementById('new-pw-2');
+let changePwBtn = document.getElementById('change-pw-btn');
+let messageErrChangePw = document.getElementById('message-error-change-pw');
+ 
 
 let loginBtn = document.getElementById('login-btn');
 loginBtn.addEventListener('click', () => {
@@ -27,7 +50,6 @@ document.getElementById('exit-modal-login').addEventListener('click', () => {
 
 let msessageErrElement = document.getElementById('message-error');
 let messageErrEmail = 'email Sai định dạng';
-let messageErrPw = 'mật khẩu phải từ 8 đến 16 ký tự';
 let messageNotUser = 'email hoặc mật khẩu không đúng'
 let btnLoginHere = document.getElementById('btn-login-here');
 let checkUser;
@@ -36,10 +58,12 @@ btnLoginHere.addEventListener('click', (e) => {
     e.preventDefault();
     let email = document.getElementById('InputEmail').value;
     let pw = document.getElementById('InputPassword').value;
-    if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))) {
+    if (!email) {
+        msessageErrElement.innerText ="Vui lòng nhập email!"
+    }else if (!pw) {
+        msessageErrElement.innerText ="Vui lòng nhập mật khẩu"
+    }else if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))) {
         msessageErrElement.innerText = messageErrEmail;
-    } else if (pw.length > 16 || pw.length < 8) {
-        msessageErrElement.innerText = messageErrPw;
     } else {
         fetch('https://6367c77ed1d09a8fa61a5a63.mockapi.io/Users')
             .then(res => res.json())
@@ -67,7 +91,7 @@ btnLoginHere.addEventListener('click', (e) => {
 let idUser;
 if (localStorage.idUser) {
     idUser = localStorage.idUser;
-    fetch('https://6367c77ed1d09a8fa61a5a63.mockapi.io/Users/' + `${idUser}`)
+    fetch('https://6367c77ed1d09a8fa61a5a63.mockapi.io/Users/' + idUser)
         .then(res => res.json())
         .then(user => {
             if (user.avatar) {
@@ -75,6 +99,35 @@ if (localStorage.idUser) {
                 document.getElementById('avatar-user').innerHTML = avatarHTML;
                 document.getElementById('name-user').innerText = user.name
             }
+
+            changePwBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                let oldPw = oldPwInput.value;
+                let newPw1 = newPwInput1.value;
+                let newPw2 = newPwInput2.value;
+                if (!oldPw || !newPw1 || !newPw2) {
+                    messageErrChangePw.innerText = 'Vui lòng nhập đầy đủ thông tin!';
+                }else if (newPw1 !== newPw2) {
+                    messageErrChangePw.innerText = 'Nhập mật khẩu mới 2 lần phải giống nhau!';
+                }else if (newPw1.length < 8 || newPw1.length > 16) {
+                    messageErrChangePw.innerText = 'Mật khẩu phải từ 8 đến 16 ký tự';
+                }else if (oldPw !== user.pw) {
+                    messageErrChangePw.innerText = 'Mật khẩu cũ không đúng!';
+                }else if (oldPw == newPw1) {
+                    messageErrChangePw.innerText = 'Mật khẩu mới phải khác mật khẩu cũ của bạn'
+                }else {
+                    fetch('https://6367c77ed1d09a8fa61a5a63.mockapi.io/Users/' + idUser,{
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            pw : newPw1
+                        })
+                    })
+                    .then(res => {
+                        location.reload();
+                    })
+                }
+            })
         })
 } else {
     idUser = 0;

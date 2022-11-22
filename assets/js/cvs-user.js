@@ -28,7 +28,9 @@ if (idUser) {
     .then(user => {
         let avatarHTML = `<img src="${user.avatar}"></img>`;
         document.getElementById('avatar-user').innerHTML = avatarHTML;
-        document.getElementById('change-img-avt-web').innerHTML = avatarHTML
+        document.getElementById('name-user').innerHTML = user.name;
+        document.getElementsByClassName('user_name')[0].innerHTML = user.name
+        document.getElementById('change-img-avt-web').innerHTML = avatarHTML;
     })
     showAll();
 } else {
@@ -283,7 +285,6 @@ function showAll() {
                   $(`#download-cv${j}`).click(function() {
                     console.log(j)
                     doc.fromHTML($(`#profile${j}`).html(), 15, 15,  {
-                        'width': 170,
                         'elementHandlers': specialElementHandlers
                     }, function(a) { console.log(a); }, margin)
     
