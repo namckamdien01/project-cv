@@ -54,6 +54,7 @@ body {
     border-radius: 50%;
     cursor: pointer;
     margin-right: 1px;
+    z-index: 1;
 }
 
 #avatar-user > i {
@@ -81,6 +82,7 @@ body {
     top: 15px;
     right: 12px;
     display: flex;
+    z-index: 2;
 }
 
 #up-load-avt-user:hover {
