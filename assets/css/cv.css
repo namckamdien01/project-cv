@@ -32,7 +32,6 @@ body {
 }
 
 #user-login-nav {
-    display: flex !important;
     align-items: center;
 }
 

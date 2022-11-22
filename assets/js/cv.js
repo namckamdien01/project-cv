@@ -81,7 +81,7 @@ if (localStorage.idUser) {
 }
 
 if (idUser) {
-    document.getElementById('user-login-nav').style.display = 'block';
+    document.getElementById('user-login-nav').style.display = 'flex';
     document.getElementById('not-login-nav').style.display = 'none';
 } else {
     document.getElementById('user-login-nav').style.display = 'none';
