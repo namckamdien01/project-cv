@@ -46,7 +46,6 @@ function login(listUsers) {
 					break;
 				} else {
 					checkUserLogin = false
-					document.getElementById("error").innerHTML = 'Sai email hoặc mật khẩu!'
 				}
 			}
 
@@ -54,6 +53,8 @@ function login(listUsers) {
 				localStorage.idUser = idUser;
 				localStorage.avatar = avatar;
 				location.replace('cv.html')
+			}else {
+				document.getElementById("error").innerHTML = 'Sai email hoặc mật khẩu!'
 			}
 
 		}
